@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "django-cms.fullname" . }}
+  name: {{ include "djangocms.fullname" . }}
   labels:
-    {{- include "django-cms.labels" . | nindent 4 }}
+    {{- include "djangocms.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ include "django-cms.name" . }}
+      app.kubernetes.io/name: {{ include "djangocms.name" . }}
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
@@ -17,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app.kubernetes.io/name: {{ include "django-cms.name" . }}
+        app.kubernetes.io/name: {{ include "djangocms.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       {{- with .Values.imagePullSecrets }}
@@ -39,13 +39,14 @@ spec:
               name: main-node
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-            - name: django-cms-data
-              mountPath: /app/data
+          volumeMounts:        
+            - name: djangocms-data
+              mountPath: /app/data/media
+              subPath: media
       volumes:
-        - name: django-cms-data
+        - name: djangocms-data
           persistentVolumeClaim:
-            claimName: "django-cms-persist-pvc"
+            claimName: "djangocms-persist-pvc"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

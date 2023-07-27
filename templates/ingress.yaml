@@ -1,11 +1,11 @@
 {{- if .Values.ingress.enabled -}}
-{{- $fullName := include "django-cms.fullname" . -}}
+{{- $fullName := include "djangocms.fullname" . -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: "{{ $fullName }}-ingress"
   labels:
-    {{- include "django-cms.labels" . | nindent 4 }}
+    {{- include "djangocms.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}
   annotations:
     ingress.kubernetes.io/rewrite-target: /
